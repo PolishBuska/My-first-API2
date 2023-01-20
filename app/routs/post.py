@@ -13,14 +13,14 @@ router = APIRouter(
 
 
 @router.get('/',response_model=List[schemas.PostOut])
-def get_posts(db: Session = Depends(get_db), limit: int = 10, skip:int = 0,search:Optional[str] = "" ):
+async def get_posts(db: Session = Depends(get_db), limit: int = 10, skip:int = 0,search:Optional[str] = "" ):
 
     #posts = db.query(models.Post).filter(
         #models.Post.title.contains(search)).limit(
         #limit).offset(skip).all()
     #cursor.execute("""SELECT * FROM posts """)
     #posts = cursor.fetchall()
-    results = db.query(models.Post, func.count(models.Vote.post_id).label("votes")).join(
+    results =  db.query(models.Post, func.count(models.Vote.post_id).label("votes")).join(
         models.Vote, models.Vote.post_id == models.Post.id, isouter = True).group_by(
         models.Post.id
     ).filter(
@@ -31,7 +31,7 @@ def get_posts(db: Session = Depends(get_db), limit: int = 10, skip:int = 0,searc
 
 @router.post("/",status_code=status.HTTP_201_CREATED,
              response_model=schemas.Post)
-def create_posts(post:schemas.CreatePost, db: Session = Depends(get_db),
+async def create_posts(post:schemas.CreatePost, db: Session = Depends(get_db),
                  current_user: int = Depends(JWT_SERVICE.get_current_user)):
     #cursor.execute("""INSERT INTO posts (title,content,published) VALUES(%s,%s,%s) RETURNING * """,
                    #(post.title,post.content,post.published))
@@ -52,7 +52,7 @@ def create_posts(post:schemas.CreatePost, db: Session = Depends(get_db),
 
 
 @router.get('/{id}',response_model=schemas.PostOut)
-def get_post(id: int,
+async def get_post(id: int,
              response: Response,
              db: Session = Depends(get_db),
              current_user: int = Depends(JWT_SERVICE.get_current_user)):
@@ -71,7 +71,7 @@ def get_post(id: int,
 
 
 @router.delete('/{id}', status_code=status.HTTP_204_NO_CONTENT)
-def delete_post(id: int,
+async def delete_post(id: int,
                 db: Session = Depends(get_db),
                 current_user: int = Depends(JWT_SERVICE.get_current_user)):
     #cursor.execute("""DELETE FROM posts WHERE id =%s returning *""", str((id)))
@@ -90,7 +90,7 @@ def delete_post(id: int,
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
 @router.put('/{id}', response_model=schemas.Post)
-def update_posts(id: int,
+async def update_posts(id: int,
                  uppost: schemas.CreatePost,
                  db: Session = Depends(get_db),
                  current_user: int = Depends(JWT_SERVICE.get_current_user)):

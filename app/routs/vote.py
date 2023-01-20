@@ -10,7 +10,7 @@ router = APIRouter(
 )
 
 @router.post('/',status_code=status.HTTP_201_CREATED)
-def voting(vote: schemas.Vote,db: Session = Depends(database.get_db),
+async def voting(vote: schemas.Vote,db: Session = Depends(database.get_db),
            current_user: int = Depends(JWT_SERVICE.get_current_user)):
     vote_query = (db.query(models.Vote).filter(
         models.Vote.post_id == vote.post_id, models.Vote.user_id == current_user.id

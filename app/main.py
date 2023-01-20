@@ -1,9 +1,9 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,Depends
 from . import models
-from .database import engine
+from .database import engine,get_db
 from .routs import post,users,auth,vote
 from fastapi.middleware.cors import CORSMiddleware
-
+from sqlalchemy.orm import Session
 origins =["*"]
 
 #models.Base.metadata.create_all(bind=engine)
@@ -23,3 +23,4 @@ app.include_router(post.router)
 app.include_router(users.router)
 app.include_router(auth.router)
 app.include_router(vote.router)
+
