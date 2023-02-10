@@ -24,5 +24,5 @@ app.include_router(vote.router)
 
 @app.get("/hello")
 def root():
-    return [{"Message":"lol"},{"yeah":"all right"}]
+    return [{"Message":"lol"},{"yeah":"all rightadfadf"}]
 
