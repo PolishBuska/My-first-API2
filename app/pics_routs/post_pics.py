@@ -9,16 +9,17 @@ import os
 
 router = APIRouter(
     prefix='/jpgs',
-    tags=['posts']
+    tags=['pics']
 )
 
 
 @router.get('/images')
 def images():
     out = []
-    for filename in os.listdir('static/images'):
+    for filename in os.listdir('app/static/images'):
         out.append({"name":filename.split('.')[0],
-                    "path":"/static/images" + filename})
-        return out
+                    "path":"/static/images/" + filename})
+    return out
+
 
 

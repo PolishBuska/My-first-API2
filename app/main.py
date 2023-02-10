@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from .routs import post, users, auth, vote
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from pics_routs import post_pics
+from .pics_routs import post_pics
 
 origins = ["*"]
 
