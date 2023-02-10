@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from .routs import post, users, auth, vote
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from pics_routs import post_pics
 
 origins = ["*"]
 
@@ -22,6 +23,8 @@ app.include_router(post.router)
 app.include_router(users.router)
 app.include_router(auth.router)
 app.include_router(vote.router)
+app.include_router(post_pics.router)
+
 
 @app.get("/hello")
 def root():
