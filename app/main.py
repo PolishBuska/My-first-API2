@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from .routs import post, users, auth, vote
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 origins = ["*"]
 
@@ -26,3 +27,4 @@ app.include_router(vote.router)
 def root():
     return [{"Message":"lol"},{"yeah":"all rightadfadf"}]
 
+app.mount("/static", StaticFiles(directory="app/static"),name="static")

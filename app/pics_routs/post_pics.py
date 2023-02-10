@@ -4,3 +4,14 @@ from sqlalchemy.orm import Session
 from ..database import get_db
 from typing import List,Optional
 from sqlalchemy import func
+from fastapi.staticfiles import StaticFiles
+
+router = APIRouter(
+    prefix='/jpgs',
+    tags=['posts']
+)
+
+
+
+
+
