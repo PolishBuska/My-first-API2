@@ -3,6 +3,7 @@ from .routs import post, users, auth, vote
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from .pics_routs import post_pics
+import os
 
 origins = ["*"]
 
@@ -31,3 +32,4 @@ def root():
     return [{"Message":"lol"},{"yeah":"all rightadfadf"}]
 
 app.mount("/static", StaticFiles(directory="app/static"),name="static")
+

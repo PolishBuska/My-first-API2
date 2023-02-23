@@ -2,6 +2,7 @@ from fastapi import status,HTTPException,Response,FastAPI,Depends,APIRouter
 from .. import models,schemas,utils
 from sqlalchemy.orm import Session
 from ..database import get_db
+from typing import Optional
 
 router = APIRouter(
     prefix='/user',
@@ -15,10 +16,12 @@ async def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
 
     user.password = utils.hash(user.password)
     new_user = models.User(**user.dict())
+
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
-    return new_user
+    return  new_user
+
 
 @router.get('/{id}', response_model=schemas.UserOut)
 async def get_user(id: int,db: Session = Depends(get_db)):
