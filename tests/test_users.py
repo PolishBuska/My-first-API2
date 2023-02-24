@@ -1,36 +1,9 @@
-from app.main import app
-from fastapi.testclient import TestClient
+
 from app import schemas
-from app.config import settings
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
-from app.database import get_db
-from app.database import Base
-import pytest
-from alembic import command
-
-@pytest.fixture()
-def session():
-    Base.metadata.drop_all(bind=engine)
-    Base.metadata.create_all(bind=engine)
-    db = TestingSessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+from .database import client,session
 
 
-@pytest.fixture
-def client(session):
-    def override_get_db():
-        try:
-            yield session
-        finally:
-            session.close()
 
-    app.dependency_overrides[get_db] = override_get_db
-    yield TestClient(app)
 
 def test_root(client):
     res = client.get("/")
@@ -43,37 +16,5 @@ def test_create_user(client):
 
     new_user = schemas.UserOut(**res.json())
     assert new_user.email == 'hello1@gmail.com'
-    assert res.status_code ==201
-
-#SQLALCHEMY_DATABASE_URL = 'postgresql://postgres:7861@localhost:5432/fastapi_test'
-SQLALCHEMY_DATABASE_URL = f'postgresql://{settings.database_username}:' \
-                          f'{settings.database_password}@' \
-                          f'{settings.database_hostname}:' \
-                          f'{settings.database_port}/' \
-                          f'{settings.database_name}_test'
-
-engine = create_engine(SQLALCHEMY_DATABASE_URL)
-
-TestingSessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
-
-
-
-#while True:
-
-   # try:
-   #     conn = psycopg2.connect(host = 'localhost',database ='fastapi',user = 'postgres',password ='7861',cursor_factory=RealDictCursor)
-      #  cursor = conn.cursor()
-     #   print('dbdone')
-     #   break
-   # except Exception as error:
-     #   print('failed to connect', error)
-     #   time.sleep(2)
-
-def override_get_db():
-    db = TestingSessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
+    assert res.status_code == 201
 
