@@ -7,17 +7,22 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from app.database import get_db
 from app.database import Base
+import pytest
+from alembic import command
 
+@pytest.fixture
+def client():
+    Base.metadata.drop_all(bind=engine)
+    Base.metadata.create_all(bind=engine)
+    yield TestClient(app)
 
-client = TestClient(app)
-
-def test_root():
+def test_root(client):
     res = client.get("/")
     print(res.json().get('Message'))
     assert res.json().get('Message') == 'Hello World'
     assert res.status_code == 200
 
-def test_create_user():
+def test_create_user(client):
     res = client.post('/users/',json={'email':"hello1@gmail.com","password":"password123"})
 
     new_user = schemas.UserOut(**res.json())
@@ -34,7 +39,7 @@ SQLALCHEMY_DATABASE_URL = f'postgresql://{settings.database_username}:' \
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 TestingSessionLocal = sessionmaker(autocommit=False,autoflush=False,bind=engine)
-Base.metadata.create_all(bind=engine)
+
 
 
 #while True:
