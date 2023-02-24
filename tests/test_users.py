@@ -10,10 +10,26 @@ from app.database import Base
 import pytest
 from alembic import command
 
-@pytest.fixture
-def client():
+@pytest.fixture()
+def session():
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
+    db = TestingSessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+@pytest.fixture
+def client(session):
+    def override_get_db():
+        try:
+            yield session
+        finally:
+            session.close()
+
+    app.dependency_overrides[get_db] = override_get_db
     yield TestClient(app)
 
 def test_root(client):
@@ -60,4 +76,4 @@ def override_get_db():
     finally:
         db.close()
 
-app.dependency_overrides[get_db]= override_get_db
+
