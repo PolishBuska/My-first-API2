@@ -5,7 +5,7 @@ from ..database import get_db
 from typing import Optional
 
 router = APIRouter(
-    prefix='/user',
+    prefix='/users',
     tags=['Users']
 )
 

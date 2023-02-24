@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI,status,HTTPException
 from .routs import post, users, auth, vote
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -27,9 +27,9 @@ app.include_router(vote.router)
 app.include_router(post_pics.router)
 
 
-@app.get("/hello")
+@app.get("/",status_code=status.HTTP_200_OK)
 def root():
-    return [{"Message":"lol"},{"yeah":"all rightadfadf"}]
+    return {"Message":"Hello World"}
 
 app.mount("/static", StaticFiles(directory="app/static"),name="static")
 
