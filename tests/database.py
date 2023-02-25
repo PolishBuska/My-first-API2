@@ -10,7 +10,7 @@ from app.database import Base
 import pytest
 from alembic import command
 
-@pytest.fixture()
+@pytest.fixture(scope="function")
 def session():
     Base.metadata.drop_all(bind=engine)
     Base.metadata.create_all(bind=engine)
@@ -20,7 +20,7 @@ def session():
     finally:
         db.close()
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 def client(session):
     def override_get_db():
         try:
