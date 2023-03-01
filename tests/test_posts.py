@@ -83,3 +83,19 @@ def test_update_post(authorized_client,test_user,test_posts):
     assert  post_update.title == data['title']
     assert  post_update.content == data['content']
     assert len(res_estimate.json()) == len(test_posts)
+
+def test_update_none_post(authorized_client,test_user,test_posts):
+    data = {
+        "title":"update 1",
+        "content":"update",
+        "id":test_posts[0].id
+    }
+    res = authorized_client.put(f'/posts/31513513513',json=data)
+    res_estimate = authorized_client.get(f'/posts')
+    assert  res.status_code == status.HTTP_404_NOT_FOUND
+    assert len(res_estimate.json()) == len(test_posts)
+
+def test_unauthorized_user_update_post(client, test_posts):
+    res = client.put(f'/posts/{test_posts[0].id}')
+    assert res.status_code == 401
+
