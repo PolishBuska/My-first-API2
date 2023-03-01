@@ -89,7 +89,7 @@ async def delete_post(id: int,
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
 
-@router.put('/{id}', response_model=schemas.Post)
+@router.put('/{id}', response_model=schemas.Post,status_code=status.HTTP_200_OK)
 async def update_posts(id: int,
                  uppost: schemas.CreatePost,
                  db: Session = Depends(get_db),
