@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr,conint
+from pydantic import BaseModel, EmailStr,conint,stricturl
 from datetime import datetime
 from typing import Optional
 class PostBase(BaseModel):
@@ -43,5 +43,14 @@ class PostOut(BaseModel):
     Post: Post
     votes: int
 
+    class Config:
+        orm_mode = True
+
+class PictureOut(BaseModel):
+    url : str
+
+class Picture_out_response(BaseModel):
+    url:str
+    owner: UserOut
     class Config:
         orm_mode = True
