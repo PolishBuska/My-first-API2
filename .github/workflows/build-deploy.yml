@@ -35,6 +35,7 @@ jobs:
            --health-retries 5
     runs-on: ubuntu-latest
     steps:
+      - continue-on-error: false
       - name: pulling git repo
         uses: actions/checkout@v2
       - name: Install python version 3.9

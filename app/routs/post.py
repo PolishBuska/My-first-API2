@@ -33,8 +33,8 @@ async def get_posts(db: Session = Depends(get_db), limit: int = 10, skip:int = 0
              response_model=schemas.Post)
 async def create_posts(post:schemas.CreatePost,
                        db: Session = Depends(get_db),
-                 current_user: int = Depends(JWT_SERVICE.get_current_user),
-                       file: UploadFile = File(...)):
+                 current_user: int = Depends(JWT_SERVICE.get_current_user)):
+                       #file: UploadFile = File(...)):
     #file_location_db = {"url": f"app/static/images/{file.filename}"}
    # file_location_db = schemas.PictureOut(**file_location_db)
 
@@ -58,7 +58,6 @@ async def create_posts(post:schemas.CreatePost,
 
 @router.get('/{id}',response_model=schemas.PostOut)
 async def get_post(id: int,
-             response: Response,
              db: Session = Depends(get_db),
              current_user: int = Depends(JWT_SERVICE.get_current_user)):
     #cursor.execute("""SELECT * from posts WHERE id = %s """, str((id)))
