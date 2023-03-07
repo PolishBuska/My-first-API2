@@ -6,7 +6,6 @@ class PostBase(BaseModel):
     content: str
     published: bool = True
 class CreatePost (PostBase):
-
     pass
 
 class UserOut(BaseModel):
@@ -20,7 +19,6 @@ class Post(PostBase):
     created_at: datetime
     owner_id: int
     owner: UserOut
-
     class Config:
         orm_mode = True
 
@@ -43,5 +41,14 @@ class PostOut(BaseModel):
     Post: Post
     votes: int
 
+    class Config:
+        orm_mode = True
+
+class PictureOut(BaseModel):
+    url : str
+
+class Picture_out_response(BaseModel):
+    url:str
+    owner: UserOut
     class Config:
         orm_mode = True
