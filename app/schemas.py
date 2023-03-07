@@ -19,8 +19,6 @@ class Post(PostBase):
     created_at: datetime
     owner_id: int
     owner: UserOut
-    url: str
-
     class Config:
         orm_mode = True
 
