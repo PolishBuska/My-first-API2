@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr,conint,stricturl
+from pydantic import BaseModel, EmailStr,conint
 from datetime import datetime
 from typing import Optional
 class PostBase(BaseModel):
@@ -6,7 +6,6 @@ class PostBase(BaseModel):
     content: str
     published: bool = True
 class CreatePost (PostBase):
-
     pass
 
 class UserOut(BaseModel):
@@ -20,6 +19,7 @@ class Post(PostBase):
     created_at: datetime
     owner_id: int
     owner: UserOut
+    url: str
 
     class Config:
         orm_mode = True
